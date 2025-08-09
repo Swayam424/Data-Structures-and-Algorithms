@@ -1,0 +1,38 @@
+import java.util.*;
+public class Solution {
+    public static LinkedList<Integer> shortestPath(int[][] edges, int n, int m, int s, int t) {
+        // Build adjacency list
+        HashMap<Integer,ArrayList<Integer>> adj=new HashMap<>();
+        for(int i=0;i<edges.length;i++){
+            int u=edges[i][0],v=edges[i][1];
+            adj.putIfAbsent(u,new ArrayList<>());
+            adj.putIfAbsent(v,new ArrayList<>());
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        boolean[] visited=new boolean[n+1]; // 1-indexed
+        int[] parent=new int[n+1];
+        Arrays.fill(parent,-1);
+        Queue<Integer> q=new LinkedList<>();
+        q.add(s);
+        visited[s]=true;
+        while(!q.isEmpty()){
+            int front=q.poll();
+            for(int neighbour:adj.get(front)){
+                if(!visited[neighbour]){
+                    visited[neighbour]=true;
+                    parent[neighbour]=front;
+                    q.add(neighbour);
+                }
+            }
+        }
+        // Reconstruct path
+        LinkedList<Integer> ans=new LinkedList<>();
+        int curr=t;
+        while(curr!=-1){
+            ans.addFirst(curr);
+            curr=parent[curr];
+        }
+        return ans;
+    }
+}
