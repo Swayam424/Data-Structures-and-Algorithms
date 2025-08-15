@@ -1,0 +1,45 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	
+	public static ArrayList < Integer > dijkstra(ArrayList< ArrayList < Integer > > vec, int vertices, int edges, int source){
+		//adjacency list
+        HashMap<Integer,ArrayList<int[]>> adj=new HashMap<>();
+        for(int i=0;i<vertices;i++){
+            adj.put(i,new ArrayList<>()); 
+        }
+        for(int i=0;i<vec.size();i++){
+            int u=vec.get(i).get(0),v=vec.get(i).get(1),w=vec.get(i).get(2);
+            int n1[]=new int[2],n2[]=new int[2];
+            n1[0]=v;
+            n1[1]=w;
+            n2[0]=u;
+            n2[1]=w;
+            adj.get(u).add(n1);
+            adj.get(v).add(n2);
+        }
+        //to store distance of each vertices from source after computation
+        int distance[]=new int[vertices];
+        Arrays.fill(distance,Integer.MAX_VALUE);
+        distance[source]=0;
+        //priority queue to store the vertex with minimum distance from the source
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[1]-b[1]);
+        pq.offer(new int[]{source,0});
+        while(!pq.isEmpty()){
+            int curr[]=pq.poll(),node=curr[0],weight=curr[1];
+            for(int neighbour[]:adj.get(node)){
+                int nextnode=neighbour[0],dis=neighbour[1];
+                if(dis+weight<distance[nextnode])
+                {
+                    distance[nextnode]=dis+weight;
+                    pq.offer(new int[]{nextnode,distance[nextnode]});
+                }
+            }
+        }
+        ArrayList<Integer> ans=new ArrayList<>();
+            for(int i=0;i<distance.length;i++){
+                ans.add(distance[i]);
+            }
+            return ans;
+	}
+}
