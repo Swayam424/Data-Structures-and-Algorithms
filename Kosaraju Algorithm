@@ -1,0 +1,49 @@
+import java.util.ArrayList;
+import java.util.*;
+public class Solution{
+	static void dfs(int node,HashMap<Integer,ArrayList<Integer>> adj,Stack<Integer> st,boolean visited[]){
+		visited[node]=true;
+		for(int neighbour:adj.get(node)){
+			if(!visited[neighbour])
+			dfs(neighbour,adj,st,visited);
+		}
+		st.push(node);
+	}
+	static void revDfs(int node,HashMap<Integer,ArrayList<Integer>> transadj,boolean visited[]){
+		visited[node]=true;
+		for(int neighbour:transadj.get(node)){
+			if(!visited[neighbour])
+			revDfs(neighbour,transadj,visited);
+		}
+	}
+	public static int stronglyConnectedComponents(int v, ArrayList<ArrayList<Integer>> edges) {
+		// Write your code here.
+		HashMap<Integer,ArrayList<Integer>> adj=new HashMap<>();
+		HashMap<Integer,ArrayList<Integer>> transadj=new HashMap<>();
+		for(int i=0;i<v;i++){
+			adj.put(i,new ArrayList<>());
+			transadj.put(i,new ArrayList<>());
+		}
+		for(int i=0;i<edges.size();i++){
+			int u=edges.get(i).get(0),x=edges.get(i).get(1);
+			adj.get(u).add(x);
+			transadj.get(x).add(u);
+		}
+		Stack<Integer> st=new Stack<>();
+		boolean visited[]=new boolean[v];
+		for(int i=0;i<v;i++){
+			if(!visited[i])
+			dfs(i,adj,st,visited);
+		}
+		Arrays.fill(visited,false);
+		int c=0;
+		while(!st.isEmpty()){
+			int element=st.pop();
+			if(!visited[element]){
+				c++;
+				revDfs(element,transadj,visited);
+			}
+		}
+		return c;
+	}
+}
