@@ -1,0 +1,46 @@
+public class Solution {
+	static void merge(int arr[],int s,int e){
+		int mid=s+(e-s)/2,size1=mid-s+1,size2=e-mid,k=s;
+		int arr1[]=new int[size1],arr2[]=new int[size2];
+		for(int i=0;i<size1;i++){
+			arr1[i]=arr[k++];
+		}
+		for(int i=0;i<size2;i++){
+			arr2[i]=arr[k++];
+		}
+		//Merging two arrays in a sorted manner
+		int ind1=0,ind2=0;
+		k=s;
+		while(ind1 < size1 && ind2 < size2){
+			if(arr1[ind1]<arr2[ind2]){
+				arr[k++]=arr1[ind1++];
+			}
+			else if(arr2[ind2]<arr1[ind1]){
+				arr[k++]=arr2[ind2++];
+			}
+			else{
+				arr[k++]=arr1[ind1++];
+				arr[k++]=arr2[ind2++];
+			}
+		}
+		while(ind1<size1){
+			arr[k++]=arr1[ind1++];
+		}
+		while(ind2<size2){
+			arr[k++]=arr2[ind2++];
+		}
+	}
+	public static void sort(int arr[],int s,int e){
+		int mid=s+(e-s)/2;
+		if(s==e)
+		return;
+		sort(arr,s,mid);
+        sort(arr,mid+1,e);
+		merge(arr,s,e);
+	}
+	public static void mergeSort(int[] arr, int n) {
+		// Write your code here.
+		int s=0,e=n-1,mid=s+(e-s)/2;
+		sort(arr,s,e);
+	}
+}
